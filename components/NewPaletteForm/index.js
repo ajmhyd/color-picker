@@ -9,24 +9,41 @@ import {
   Typography,
 } from '@material-ui/core';
 import { ChevronLeft } from '@material-ui/icons';
+import PropTypes from 'prop-types';
+import { arrayMove } from 'react-sortable-hoc';
 import { NewPaletteFormStyles } from './NewPaletteFormStyles';
 import seedColors from '../../src/seedColors';
+import ColorPickerForm from '../ColorPickerForm';
+import PaletteFormNav from '../PaletteFormNav';
+import { DraggableColorList } from '../DraggableColorList';
 
 const useStyles = makeStyles(NewPaletteFormStyles);
 
-export default function NewPaletteForm({ maxColors, palettes }) {
+export default function NewPaletteForm({
+  maxColors = 20,
+  palettes = seedColors,
+}) {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const [colors, setColors] = useState(seedColors[0].colors);
+  const [newColorName, setNewColorName] = useState('');
   const paletteIsFull = colors.length >= maxColors;
+
+  const removeColor = colorName => {
+    setColors(colors.filter(color => color.name !== colorName));
+  };
+
+  const onSortEnd = ({ oldIndex, newIndex }) => {
+    setColors(arrayMove(colors, oldIndex, newIndex));
+  };
   return (
     <div className={classes.root}>
-      {/* <PaletteFormNav
+      <PaletteFormNav
         open={open}
         palettes={palettes}
-        handleSubmit={this.handleSubmit}
-        handleDrawerOpen={setOpen(true)}
-      /> */}
+        // handleSubmit={handleSubmit}
+        setOpen={setOpen}
+      />
       <Drawer
         className={classes.drawer}
         variant="persistent"
@@ -65,11 +82,14 @@ export default function NewPaletteForm({ maxColors, palettes }) {
               Random Color
             </Button>
           </div>
-          {/* <ColorPickerForm
+          <ColorPickerForm
             paletteIsFull={paletteIsFull}
-            addNewColor={this.addNewColor}
+            // addNewColor={addNewColor}
             colors={colors}
-          /> */}
+            setColors={setColors}
+            newColorName={newColorName}
+            setNewColorName={setNewColorName}
+          />
         </div>
       </Drawer>
       <main
@@ -78,14 +98,19 @@ export default function NewPaletteForm({ maxColors, palettes }) {
         })}
       >
         <div className={classes.drawerHeader} />
-        {/* <DraggableColorList
+        <DraggableColorList
           colors={colors}
-          removeColor={this.removeColor}
+          removeColor={removeColor}
           axis="xy"
-          onSortEnd={this.onSortEnd}
+          onSortEnd={onSortEnd}
           distance={20}
-        /> */}
+        />
       </main>
     </div>
   );
 }
+
+NewPaletteForm.propTypes = {
+  maxColors: PropTypes.number.isRequired,
+  palettes: PropTypes.array.isRequired,
+};

@@ -41,7 +41,7 @@ export const MiniPaletteStyles = {
     marginBottom: '-6px',
   },
   deleteIcon: {
-    color: 'white',
+    color: 'black',
     backgroundColor: '#eb3d30',
     width: '20px',
     height: '20px',
@@ -51,5 +51,6 @@ export const MiniPaletteStyles = {
     padding: '10px',
     zIndex: 10,
     opacity: 0,
+    transition: 'all 0.3s ease-in-out',
   },
 };
