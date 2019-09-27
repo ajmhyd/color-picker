@@ -36,6 +36,10 @@ export const PaletteStyles = theme => ({
       border: 'none',
       textDecoration: 'none',
     },
+    [theme.breakpoints.down('xl')]: {
+      width: '20%',
+      height: '50%',
+    },
     [theme.breakpoints.down('lg')]: {
       width: '25%',
       height: '33.3333%',

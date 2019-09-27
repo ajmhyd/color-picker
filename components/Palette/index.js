@@ -8,9 +8,9 @@ import PaletteFooter from '../PaletteFooter';
 
 const useStyles = makeStyles(PaletteStyles);
 
-export default function Palette({ palette, props }) {
+export default function Palette({ palette }) {
   const classes = useStyles();
-  const { colors, palatteName, emoji, id } = palette;
+  const { colors, paletteName, emoji, id } = palette;
   const [level, setLevel] = useState(500);
   const [format, setFormat] = useState('hex');
 
@@ -20,6 +20,8 @@ export default function Palette({ palette, props }) {
       name={color.name}
       key={color.id}
       showingFullPalette
+      paletteId={id}
+      colorId={color.id}
     />
   ));
 
@@ -33,7 +35,7 @@ export default function Palette({ palette, props }) {
         showingAllColors
       />
       <div className={classes.colors}>{colorBoxes}</div>
-      <PaletteFooter palatteName={palatteName} emoji={emoji} />
+      <PaletteFooter paletteName={paletteName} emoji={emoji} />
     </div>
   );
 }

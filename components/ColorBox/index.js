@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { makeStyles } from '@material-ui/core/styles';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import { ColorBoxStyles } from './ColorBoxStyles.js';
 
 const useStyles = makeStyles(ColorBoxStyles);
 
-export default function ColorBox({ background, name, showingFullPalette }) {
+export default function ColorBox({
+  background,
+  name,
+  showingFullPalette,
+  paletteId,
+  colorId,
+}) {
   const props = { background, showingFullPalette };
   const classes = useStyles(props);
   const [copied, setCopied] = useState(false);
@@ -40,9 +48,31 @@ export default function ColorBox({ background, name, showingFullPalette }) {
             Copy
           </button>
         </div>
-
-        <span className={classes.seeMore}>More</span>
+        {showingFullPalette && (
+          <Link
+            href="/palette/[paletteId]/[colorId]"
+            as={`/palette/${paletteId}/${colorId}`}
+          >
+            <span
+              className={classes.seeMore}
+              onClick={e => e.stopPropagation()}
+              role="button"
+              onKeyDown={e => e.stopPropagation()}
+              tabIndex={0}
+            >
+              More
+            </span>
+          </Link>
+        )}
       </div>
     </CopyToClipboard>
   );
 }
+
+ColorBox.propTypes = {
+  background: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  showingFullPalette: PropTypes.bool.isRequired,
+  paletteId: PropTypes.string,
+  colorId: PropTypes.string,
+};

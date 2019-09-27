@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import {
   MenuItem,
@@ -11,14 +9,18 @@ import {
   IconButton,
 } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
+import PropTypes from 'prop-types';
 import { NavBarStyles } from './NavBarstyles';
 
 const useStyles = makeStyles(NavBarStyles);
 
-export default function NavBar({ level, setLevel, format, setFormat }) {
-  const router = useRouter();
-  const { pid } = router.query;
-  console.log(router.query);
+export default function NavBar({
+  level,
+  setLevel,
+  format,
+  setFormat,
+  showingAllColors,
+}) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
@@ -30,25 +32,29 @@ export default function NavBar({ level, setLevel, format, setFormat }) {
   const handleSliderChange = (e, value) => {
     setLevel(value);
   };
+
   return (
     <header className={classes.Navbar}>
       <div className={classes.logo}>
-        <Link href="/palette/[pid]" as="/palette/material-ui-colors">
+        <Link href="/">
           <a>Color Picker</a>
         </Link>
       </div>
-      <div>
-        <span>Level: {level}</span>
-        <div className={classes.slider}>
-          <Slider
-            defaultValue={level}
-            min={100}
-            max={900}
-            onChange={(e, value) => handleSliderChange(e, value)}
-            step={100}
-          />
+      {showingAllColors && (
+        <div>
+          <span>Level: {level}</span>
+          <div className={classes.slider}>
+            <Slider
+              defaultValue={level}
+              min={100}
+              max={900}
+              onChange={(e, value) => handleSliderChange(e, value)}
+              step={100}
+            />
+          </div>
         </div>
-      </div>
+      )}
+
       <div className={classes.selectContainer}>
         <Select value={format} onChange={e => handleFormatChange(e)}>
           <MenuItem value="hex">HEX - #ffffff</MenuItem>
@@ -81,3 +87,11 @@ export default function NavBar({ level, setLevel, format, setFormat }) {
     </header>
   );
 }
+
+NavBar.propTypes = {
+  level: PropTypes.number,
+  setLevel: PropTypes.func,
+  format: PropTypes.string.isRequired,
+  setFormat: PropTypes.func.isRequired,
+  showingAllColors: PropTypes.bool.isRequired,
+};

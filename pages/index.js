@@ -1,5 +1,6 @@
-import App from '../components/App';
+import PaletteList from '../components/PaletteList';
+import seedColors from '../src/seedColors';
 
 export default function index() {
-  return <App pid="material-ui-colors" />;
+  return <PaletteList palettes={seedColors} />;
 }
